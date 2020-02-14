@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DateContent : MonoBehaviour
+public class ScrollDateContent : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()

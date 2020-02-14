@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(UI_InfiniteScrollModified))]
-public class DateController : MonoBehaviour
+public class ScrollDatePickerController : MonoBehaviour
 {
     public UI_InfiniteScrollModified infiniteScrollModified;
     public RectTransform scrollViewContent;
@@ -11,7 +11,7 @@ public class DateController : MonoBehaviour
     public int yearLimit;
     public bool shouldInit;
 
-    private List<DateContent> _dateContents;
+    private List<ScrollDateContent> _dateContents;
     private float _centerPosition;
     
     void Awake()
@@ -27,7 +27,7 @@ public class DateController : MonoBehaviour
 
         foreach (RectTransform child in scrollViewContent.transform)
         {
-            var tempDateContent = child.GetComponent<DateContent>();
+            var tempDateContent = child.GetComponent<ScrollDateContent>();
 
             if (tempDateContent != null)
             {
@@ -47,13 +47,13 @@ public class DateController : MonoBehaviour
         
         if (_dateContents.Count % 2 == 0)
         {
-            var tempDateContent = Instantiate(_dateContents[0], scrollViewContent, false).GetComponent<DateContent>();
+            var tempDateContent = Instantiate(_dateContents[0], scrollViewContent, false).GetComponent<ScrollDateContent>();
 
             _dateContents.Add(tempDateContent);
         }
 
+        InitializeDate();
         
-
         infiniteScrollModified.Init();
     }
 
