@@ -11,7 +11,7 @@ public class ScrollDatePickerController : MonoBehaviour
     public int yearLimit;
     public bool shouldInit;
 
-    private List<ScrollDateContent> _dateContents;
+    private readonly List<ScrollDateContent> _dateContents = new List<ScrollDateContent>();
     private float _centerPosition;
     
     void Awake()
@@ -59,6 +59,6 @@ public class ScrollDatePickerController : MonoBehaviour
 
     private void InitializeDate()
     {
-        
+
     }
 }
