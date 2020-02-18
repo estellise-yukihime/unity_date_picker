@@ -9,7 +9,8 @@ namespace UnityEngine.UI.Extensions
 {
     [RequireComponent(typeof(ScrollRect))]
     [AddComponentMenu("Layout/Extensions/Vertical Scroller")]
-    public class UIVerticalScroller : MonoBehaviour
+    public class 
+        UIVerticalScroller : MonoBehaviour
     {
         [Tooltip("Scrollable area (content of desired ScrollRect)")]
         public RectTransform _scrollingPanel;
