@@ -48,6 +48,8 @@ namespace ScrollDatePicker
         /// <summary>
         /// ScrollDateController Related Class
         /// </summary>
+        [Range(0, 1f)]
+        public float stimulateScrollSpeed;
         private IScrollEvent _scrollEvent;
 
         public void Init()
@@ -87,6 +89,12 @@ namespace ScrollDatePicker
             {
                 Debug.LogError("UI_InfiniteScroll => No ScrollRect component found");
             }
+        }
+
+        public void InitDelayed()
+        {
+            if(!_hasDisabledGridComponents)
+                DisableGridComponents();
         }
 
         void DisableGridComponents()
@@ -142,6 +150,22 @@ namespace ScrollDatePicker
                     }
                 }
             }
+        }
+
+        public void StimulateScrollUp()
+        {
+            var anchoredPosition = _scrollRect.content.anchoredPosition;
+            var contentAnchoredPosition = anchoredPosition;
+            var newPositionUp = new Vector2(contentAnchoredPosition.x, contentAnchoredPosition.y - _recordOffsetY);
+            _scrollRect.content.anchoredPosition = Vector2.Lerp(anchoredPosition, newPositionUp, stimulateScrollSpeed);
+        }
+
+        public void StimulateScrollDown()
+        {
+            var anchoredPosition = _scrollRect.content.anchoredPosition;
+            var contentAnchoredPosition = anchoredPosition;
+            var newPositionUp = new Vector2(contentAnchoredPosition.x, contentAnchoredPosition.y + _recordOffsetY);
+            _scrollRect.content.anchoredPosition = Vector2.Lerp(anchoredPosition, newPositionUp, stimulateScrollSpeed);
         }
     }
 }

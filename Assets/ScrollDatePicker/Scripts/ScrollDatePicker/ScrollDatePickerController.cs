@@ -48,7 +48,7 @@ namespace ScrollDatePicker
         public RectTransform center;
 
         public float lerpSpeed = 5f;
-        public float centerTolerance = .1f; 
+        public float centerTolerance = .1f;
         public int yearLimit;
         public bool shouldInit;
 
@@ -76,17 +76,18 @@ namespace ScrollDatePicker
 
             var distance = new float[_dateContents.Count];
             var minDistance = 0f;
-        
+
             for (var i = 0; i < _dateContents.Count; i++)
             {
                 distance[i] = Mathf.Abs(center.position.y - _dateContents[i].MyRectTransform.transform.position.y);
 
                 var scale = Mathf.Min(1f, 1 / (1 + distance[i] / 300));
-                _dateContents[i].MyRectTransform.transform.localScale = new Vector3(scale, scale, 1f);
+                _dateContents[i].MyRectTransform.transform.localScale = new Vector3(scale, 1f, 1f);
+                _dateContents[i].dateText.rectTransform.localScale = new Vector3(1f, scale, 1f);
             }
 
             minDistance = Mathf.Min(distance);
-        
+
             for (var i = 0; i < _dateContents.Count; i++)
             {
 
@@ -96,14 +97,15 @@ namespace ScrollDatePicker
 
                     var isDateGreaterThanMinAllowed = DateTime.Compare(_dateContents[i].MyDate, _currentDate) != -1;
                     var isDateLesserThanMaxAllowed =
-                        yearLimit <= 0 || DateTime.Compare(_currentDate.AddYears(yearLimit), _dateContents[i].MyDate) != -1;
-                    
+                        yearLimit <= 0 || DateTime.Compare(_currentDate.AddYears(yearLimit), _dateContents[i].MyDate) !=
+                        -1;
+
                     if (isDateGreaterThanMinAllowed && isDateLesserThanMaxAllowed)
                     {
                         _currentContentPositionY = _dateContents[i].AnchoredPosition.y;
                     }
                 }
-            
+
                 _dateContents[i].MyCanvasGroup.interactable = i == _centerIndex;
                 _dateContents[i].MyCanvasGroup.alpha = .5f + .5f * Convert.ToInt32(i == _centerIndex);
             }
@@ -132,25 +134,27 @@ namespace ScrollDatePicker
                 Debug.LogError("No DateContent or only small amount of DateContents found in the list of prefabs");
                 return;
             }
-        
+
             if (_dateContents.Count % 2 == 0)
             {
-                var tempDateContent = Instantiate(_dateContents[0], scrollViewContent, false).GetComponent<ScrollDateContent>();
+                var tempDateContent = Instantiate(_dateContents[0], scrollViewContent, false)
+                    .GetComponent<ScrollDateContent>();
 
                 _dateContents.Add(tempDateContent);
             }
-        
+
             Invoke(nameof(InitializeDelayed), .1f);
-        
+
         }
 
         private void InitializeDelayed()
         {
             _centerIndex = (_dateContents.Count - 1) / 2;
             _offsetContentPositionY = _dateContents[_centerIndex].AnchoredPosition.y;
-        
+
             InitializeDate();
             infiniteScrollModified.Init();
+            infiniteScrollModified.InitDelayed();
 
             _update = true;
         }
@@ -195,6 +199,19 @@ namespace ScrollDatePicker
             _dateContents[_dateContents.Count - 1].MyDate = _dateContents[_dateContents.Count - 2].MyDate.AddDays(1);
         }
 
+        public void StimulateUp()
+        {
+            // stimulate scroll up
+            infiniteScrollModified.StimulateScrollUp();
+        }
+
+        public void StimulateDown()
+        {
+            // stimulate scroll down
+            infiniteScrollModified.StimulateScrollDown();
+        }
+
+
         private float GetContentYPosition()
         {
             return _offsetContentPositionY - _currentContentPositionY;
@@ -205,8 +222,47 @@ namespace ScrollDatePicker
             var newY = Mathf.Lerp(scrollViewContent.anchoredPosition.y, GetContentYPosition(),
                 Time.deltaTime * lerpSpeed);
             var newPosition = new Vector2(scrollViewContent.anchoredPosition.x, newY);
-        
+
             scrollViewContent.anchoredPosition = newPosition;
         }
+        
+        
+        
+        
+        /**
+         *
+
+            var newAnchoredPosition = _dateContents[2].AnchoredPosition;
+            var tempDistance = Mathf.Abs(_dateContents[2].AnchoredPosition.y - _dateContents[3].AnchoredPosition.y);
+            var newPosition = tempDistance * scale[2];
+            newAnchoredPosition.y += -newPosition;
+         *
+         *
+         * 
+         * 
+            //_dateContents[2].MyRectTransform.anchoredPosition = newAnchoredPosition;
+            
+            //upper part of the list
+            for (var x = _centerIndex - 1; x >= 0; x--)
+            {
+                //var newAnchoredPosition = _dateContents[x].AnchoredPosition;
+                //var tempDistance = Mathf.Abs(_dateContents[x].AnchoredPosition.y - _dateContents[x + 1].AnchoredPosition.y);
+                //var newPosition = tempDistance * scale[x];
+                //newAnchoredPosition.y += -newPosition;
+                //_dateContents[x].MyRectTransform.anchoredPosition = newAnchoredPosition;
+            }
+
+            //lower part of the list
+            /** /
+            for (var x = _centerIndex + 1; x < _dateContents.Count - 1; x++)
+            {
+                var newAnchoredPosition = _dateContents[x].AnchoredPosition;
+                var tempDistance = Mathf.Abs(_dateContents[x].AnchoredPosition.y - _dateContents[x + 1].AnchoredPosition.y);
+                var newPosition = tempDistance * scale[x];
+                newAnchoredPosition.y = newPosition;
+                _dateContents[x].MyRectTransform.anchoredPosition = newAnchoredPosition;
+            }
+            /**/
+         /**/
     }
 }
