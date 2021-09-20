@@ -28,12 +28,10 @@ public class ScrollDateButtons : MonoBehaviour
 
     private void Update()
     {
-
         if (_scrollStatus.Count <= 0)
         {
             return;
         }
-
 
         if (_scrollStatus[nameof(StimulateScrollUp)])
         {
@@ -43,7 +41,6 @@ public class ScrollDateButtons : MonoBehaviour
         {
             scrollDatePickerController.StimulateDown();
         }
-       
     }
 
     public void Initialize()
@@ -54,7 +51,6 @@ public class ScrollDateButtons : MonoBehaviour
         // scroll up
         CreateEventEntry(scrollUp, EventTriggerType.PointerDown, StimulateScrollUp);
         CreateEventEntry(scrollUp, EventTriggerType.PointerUp, StimulateScrollUp);
-        
         
         // scroll down
         CreateEventEntry(scrollDown, EventTriggerType.PointerDown, StimulateScrollDown);
@@ -71,13 +67,13 @@ public class ScrollDateButtons : MonoBehaviour
         _scrollStatus[nameof(StimulateScrollDown)] = !_scrollStatus[nameof(StimulateScrollDown)];
     }
 
-
-
     private void CreateEventEntry(EventTrigger eventTrigger, EventTriggerType eventTriggerType, Action<PointerEventData> eventData)
     {
         var entry = new EventTrigger.Entry();
+        
         entry.eventID = eventTriggerType;
         entry.callback.AddListener((data) => eventData((PointerEventData)data));
+        
         eventTrigger.triggers.Add(entry);
     }
 }

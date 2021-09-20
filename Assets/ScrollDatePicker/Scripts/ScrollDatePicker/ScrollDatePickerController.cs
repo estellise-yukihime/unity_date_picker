@@ -59,7 +59,7 @@ namespace ScrollDatePicker
         private float _currentContentPositionY = 0f;
         private bool _update = false;
 
-        void Awake()
+        private void Awake()
         {
             if (shouldInit)
             {
@@ -67,7 +67,7 @@ namespace ScrollDatePicker
             }
         }
 
-        public void Update()
+        private void Update()
         {
             if (_dateContents.Count <= 0 || !_update)
             {
@@ -82,6 +82,7 @@ namespace ScrollDatePicker
                 distance[i] = Mathf.Abs(center.position.y - _dateContents[i].MyRectTransform.transform.position.y);
 
                 var scale = Mathf.Min(1f, 1 / (1 + distance[i] / 300));
+                
                 _dateContents[i].MyRectTransform.transform.localScale = new Vector3(scale, 1f, 1f);
                 _dateContents[i].dateText.rectTransform.localScale = new Vector3(1f, scale, 1f);
             }
@@ -96,9 +97,7 @@ namespace ScrollDatePicker
                     _centerIndex = i;
 
                     var isDateGreaterThanMinAllowed = DateTime.Compare(_dateContents[i].MyDate, _currentDate) != -1;
-                    var isDateLesserThanMaxAllowed =
-                        yearLimit <= 0 || DateTime.Compare(_currentDate.AddYears(yearLimit), _dateContents[i].MyDate) !=
-                        -1;
+                    var isDateLesserThanMaxAllowed = yearLimit <= 0 || DateTime.Compare(_currentDate.AddYears(yearLimit), _dateContents[i].MyDate) != -1;
 
                     if (isDateGreaterThanMinAllowed && isDateLesserThanMaxAllowed)
                     {
@@ -211,7 +210,6 @@ namespace ScrollDatePicker
             infiniteScrollModified.StimulateScrollDown();
         }
 
-
         private float GetContentYPosition()
         {
             return _offsetContentPositionY - _currentContentPositionY;
@@ -219,8 +217,7 @@ namespace ScrollDatePicker
 
         private void ScrollToSelected()
         {
-            var newY = Mathf.Lerp(scrollViewContent.anchoredPosition.y, GetContentYPosition(),
-                Time.deltaTime * lerpSpeed);
+            var newY = Mathf.Lerp(scrollViewContent.anchoredPosition.y, GetContentYPosition(), Time.deltaTime * lerpSpeed);
             var newPosition = new Vector2(scrollViewContent.anchoredPosition.x, newY);
 
             scrollViewContent.anchoredPosition = newPosition;

@@ -64,25 +64,28 @@ namespace ScrollDatePicker
                 {
                     items.Add(_scrollRect.content.GetChild(i).GetComponent<RectTransform>());
                 }
+                
                 if (_scrollRect.content.GetComponent<VerticalLayoutGroup>() != null)
                 {
                     _verticalLayoutGroup = _scrollRect.content.GetComponent<VerticalLayoutGroup>();
                 }
+                
                 if (_scrollRect.content.GetComponent<GridLayoutGroup>() != null)
                 {
                     _gridLayoutGroup = _scrollRect.content.GetComponent<GridLayoutGroup>();
                 }
+                
                 if (_scrollRect.content.GetComponent<ContentSizeFitter>() != null)
                 {
                     _contentSizeFitter = _scrollRect.content.GetComponent<ContentSizeFitter>();
                 }
+                
                 if (GetComponent<IScrollEvent>() != null)
                 {
                     _scrollEvent = GetComponent<IScrollEvent>();
                 }
 
                 _isVertical = _scrollRect.vertical;
-            
                 _itemCount = _scrollRect.content.childCount;
             }
             else
@@ -93,8 +96,10 @@ namespace ScrollDatePicker
 
         public void InitDelayed()
         {
-            if(!_hasDisabledGridComponents)
+            if (!_hasDisabledGridComponents)
+            {
                 DisableGridComponents();
+            }
         }
 
         void DisableGridComponents()
@@ -126,9 +131,11 @@ namespace ScrollDatePicker
         public void OnScroll(Vector2 pos)
         {
             if (!_hasDisabledGridComponents)
+            {
                 DisableGridComponents();
+            }
 
-            for (int i = 0; i < items.Count; i++)
+            for (var i = 0; i < items.Count; i++)
             {
                 if (_isVertical)
                 {
@@ -136,7 +143,9 @@ namespace ScrollDatePicker
                     {
                         _newAnchoredPosition = items[i].anchoredPosition;
                         _newAnchoredPosition.y -= _itemCount * _recordOffsetY;
+                        
                         items[i].anchoredPosition = _newAnchoredPosition;
+                        
                         _scrollRect.content.GetChild(0).transform.SetAsLastSibling();
                         _scrollEvent.ScrollDown();
                     }
@@ -144,7 +153,9 @@ namespace ScrollDatePicker
                     {
                         _newAnchoredPosition = items[i].anchoredPosition;
                         _newAnchoredPosition.y += _itemCount * _recordOffsetY;
+                        
                         items[i].anchoredPosition = _newAnchoredPosition;
+                        
                         _scrollRect.content.GetChild(_itemCount - 1).transform.SetAsFirstSibling();
                         _scrollEvent.ScrollUp();
                     }
@@ -157,6 +168,7 @@ namespace ScrollDatePicker
             var anchoredPosition = _scrollRect.content.anchoredPosition;
             var contentAnchoredPosition = anchoredPosition;
             var newPositionUp = new Vector2(contentAnchoredPosition.x, contentAnchoredPosition.y - _recordOffsetY);
+            
             _scrollRect.content.anchoredPosition = Vector2.Lerp(anchoredPosition, newPositionUp, stimulateScrollSpeed);
         }
 
@@ -165,6 +177,7 @@ namespace ScrollDatePicker
             var anchoredPosition = _scrollRect.content.anchoredPosition;
             var contentAnchoredPosition = anchoredPosition;
             var newPositionUp = new Vector2(contentAnchoredPosition.x, contentAnchoredPosition.y + _recordOffsetY);
+            
             _scrollRect.content.anchoredPosition = Vector2.Lerp(anchoredPosition, newPositionUp, stimulateScrollSpeed);
         }
     }

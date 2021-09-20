@@ -6,8 +6,12 @@ namespace ScrollDatePicker
 {
     public class ScrollDateContent : MonoBehaviour
     {
-        public DateTime MyDate {
-            get => _myDate;
+        public DateTime MyDate
+        {
+            get
+            {
+                return _myDate;
+            }
             set
             {
                 _myDate = value;
@@ -64,15 +68,10 @@ namespace ScrollDatePicker
         private DateTime _myDate = DateTime.Now;
         private RectTransform _rectTransform;
         private CanvasGroup _canvasGroup;
-
-
-
+        
         private void SetDate(DateTime dateTime)
         {
-            dateText.text =
-                $"{dateTime.Year} Year {dateTime.Month} Month {dateTime.Day} Day ({dateTime.DayOfWeek.ToString()})";
+            dateText.text = $"{dateTime.Year} Year {dateTime.Month} Month {dateTime.Day} Day ({dateTime.DayOfWeek.ToString()})";
         }
-
-
     }
 }
